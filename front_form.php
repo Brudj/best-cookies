@@ -7,7 +7,7 @@ $front_positions_arr = array(
     4 => 'bottom:0;left:0;width:100%;height:auto;transform:translate(0,100%);'
 );
 ?>
-<div class="best-cookies" style="<?= $front_positions_arr[$best_cookie_settings['position']]; ?>">
+<div class="best-cookies <?= $best_cookie_settings['position'] ?: $best_cookie_settings['button_size']; ?>" style="<?= $front_positions_arr[$best_cookie_settings['position']]; ?>">
     <span class="best-cookies__close"></span>
     <div class="best-cookies__bg" style="background-color:<?= $best_cookie_settings['color']; ?>"></div>
     <div class="best-cookies__left">

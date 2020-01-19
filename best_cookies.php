@@ -39,10 +39,11 @@ function best_cookies_admin_scripts() {
 }
 
 //include wp color picker
-function best_cookies_color_picker( $hook_suffix ) {
+function best_cookies_dashboard_scripts( $hook_suffix ) {
     // first check that $hook_suffix is appropriate for your admin page
     wp_enqueue_style( 'wp-color-picker' );
-    wp_enqueue_script( 'my-script-handle', plugins_url('/js/cookie_color_picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    wp_enqueue_script( 'best-cookies-color-picker', plugins_url('/js/cookie_color_picker.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+    wp_enqueue_script( 'best-cookies-dashboard', plugins_url('/js/best-cookies-dashboard.js', __FILE__ ), false, false, true );
 }
 
 //register admin plugin page in settings
@@ -62,6 +63,7 @@ function best_cookies_page() {
                 'active' => intval($_POST['active']),
                 'title' => sanitize_text_field($_POST['title']),
                 'text' => $best_cookies_text,
+                'button_size' => sanitize_text_field($_POST['button_size']),
                 'button_text' => $best_cookies_button,
                 'color' => sanitize_text_field($_POST['color']),
                 'position' => sanitize_text_field($_POST['position'])
@@ -84,15 +86,19 @@ add_filter("plugin_action_links_$plugin", 'best_cookies_settings_link' );
 //add default values if plugin is activated
 function best_cookies_install() {
     update_option('best_cookies_version', BESTCOOKIES_VERSION);
+    //check for existing options
     $best_cookie_settings = get_option(best_cookie_settings);
-    update_option(best_cookie_settings, array(
-        'active' => $best_cookie_settings['active'] ?: 1,
-        'title' => $best_cookie_settings['title'] ?: 'We use cookies to give you the best online experience',
-        'text' => $best_cookie_settings['text'] ?: 'By using our website, you agree to our <a href="#">privacy policy</a>',
-        'button_text' => $best_cookie_settings['button_text'] ?: 'I Accept',
-        'color' => $best_cookie_settings['color'] ?: '#333333',
-        'position' => $best_cookie_settings['position'] ?: 1
-    ));
+    if( !$best_cookie_settings ){
+        update_option(best_cookie_settings, array(
+            'active' => $best_cookie_settings['active'] ?: 1,
+            'title' => $best_cookie_settings['title'] ?: 'We use cookies to give you the best online experience',
+            'text' => $best_cookie_settings['text'] ?: 'By using our website, you agree to our <a href="#">privacy policy</a>',
+            'button_size' => $best_cookie_settings['button_size'] ?: 1,
+            'button_text' => $best_cookie_settings['button_text'] ?: 'I Accept',
+            'color' => $best_cookie_settings['color'] ?: '#333333',
+            'position' => $best_cookie_settings['position'] ?: 1
+        ));
+    }
 }
 
 //delete values in plugin deactivates
@@ -104,16 +110,14 @@ function best_cookies_uninstall(){
 // Checks the version number
 function best_cookies_check_activation() {
     if (BESTCOOKIES_VERSION !== get_option('best_cookies_version') ){
-        //best_cookies_install();
-        //activate_plugin(__FILE__);
-        header("Refresh:0");
+        best_cookies_install();
     }
 }
 add_action('plugins_loaded', 'best_cookies_check_activation');
 
 add_action( 'wp_enqueue_scripts', 'best_cookies_front_scripts' );
 add_action( 'admin_init','best_cookies_admin_scripts');
-add_action( 'admin_enqueue_scripts', 'best_cookies_color_picker' );
+add_action( 'admin_enqueue_scripts', 'best_cookies_dashboard_scripts' );
 add_action( 'admin_menu', 'best_cookies_register_page' );
 add_action( 'init', 'best_cookies_install' );
 

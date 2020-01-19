@@ -48,6 +48,7 @@
     .best-cookies__left{
         position: relative;
         z-index: 1;
+        padding-right: 5px;
     }
     .best-cookies p,
     .best-cookies h5{
@@ -60,6 +61,12 @@
     .best-cookies p a:hover{
         opacity: 0.8;
     }
+    /*.best-cookies__right{*/
+        /*flex: 1 0 20%;*/
+    /*}*/
+    /*.best-cookies__right.text-right{*/
+        /*text-align: right;*/
+    /*}*/
     .best-cookies__button{
         display: inline-block;
         text-align: center;
@@ -73,3 +80,36 @@
         opacity: 0.8;
         background-color: #ffffff !important;
     }
+    .best-cookies.big_btn .best-cookies__button{
+        flex: 1 0 50%;
+    } 
+    .best-cookies.big_btn .best-cookies__left{
+        flex: 1 0 50%;
+    } 
+    .best-cookies.medium_btn .best-cookies__button{
+        width: 80%;
+        flex: 1 0 35%;
+    }
+    .best-cookies.medium_btn .best-cookies__left{
+        flex: 1 0 65%;
+    }
+    .best-cookies.small_btn .best-cookies__button{
+        flex: 1 0 20%;
+    }
+    .best-cookies.small_btn .best-cookies__left{
+        flex: 1 0 80%;
+    }
+
+@media only screen and (max-width: 1024px) {
+    .best-cookies__left{
+        display: block;
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+    .best-cookies.big_btn .best-cookies__button,
+    .best-cookies.medium_btn .best-cookies__button,
+    .best-cookies.small_btn .best-cookies__button{
+        flex: 1 0 100%;
+        text-align: center;
+    }
+}
